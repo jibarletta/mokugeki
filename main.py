@@ -2,7 +2,7 @@ import praw
 import pandas as pd
 import datetime
 
-reddit = praw.Reddit(client_id='Z-KrV-M1oNEIVQ', client_secret='7K6-UeRRhCEhoZoaAsLqvTWY92_OPA', user_agent='mokugeki')
+reddit = praw.Reddit(client_id='***', client_secret='***', user_agent='mokugeki')
 
 # get 10 hot posts from the Argentina subreddit
 
