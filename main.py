@@ -1,13 +1,22 @@
 import praw
 import pandas as pd
 import datetime
+from datetime import datetime as dt
 
-reddit = praw.Reddit(client_id='Z-KrV-M1oNEIVQ', client_secret='7K6-UeRRhCEhoZoaAsLqvTWY92_OPA', user_agent='mokugeki')
+reddit = praw.Reddit(client_id=*****, client_secret=****, user_agent=****)
 
-# get 10 hot posts from the Argentina subreddit
+# Toma la fecha actual para el estampado en cada csv posterior. 👇
+filename_date = dt.now().strftime('-%Y-%m-%d-%H-%M')
 
-post_dict = {"titulo": [], "upvotes": [], "id": [], "comentarios": [], "creado": []}
-posts = []
+# Armo un diccionario con los 10 posts más populares del subreddit "Argentina".
+
+post_dict = {"titulo": [],
+             "upvotes": [],
+             "id": [],
+             "comentarios": [],
+             "creado": [],
+             "autor": []
+             }
 arg_subreddit = reddit.subreddit('Argentina')
 for post in arg_subreddit.top(limit=10, time_filter='day'):
     post_dict["titulo"].append(post.title)
@@ -15,10 +24,34 @@ for post in arg_subreddit.top(limit=10, time_filter='day'):
     post_dict["id"].append(post.id)
     post_dict["comentarios"].append(post.num_comments)
     post_dict["creado"].append(datetime.datetime.fromtimestamp(post.created))
+    post_dict["autor"].append(post.author)
 
+# Se convierte el diccionario en un data frame.
 temas = pd.DataFrame(post_dict)
-print(temas)
-temas.to_csv("Reddit_Arg_Temas.csv")
 
-# TODO: Hasta acá perfecto, ahora hay que hacer lo mismo pero para los comentarios.
-# TODO: No te olvides de sacar los arboles de comentarios. Es muy importante.
+# Se convierte el dataframe en un CSV para posterior análisis. (comentar cuando se hagan pruebas)
+temas.to_csv(f"Reddit_Arg_Temas{filename_date}.csv")
+
+# Mismo procedimiento anterior pero para los comentarios de cada post.
+lista_ids = temas["id"]
+for postid in lista_ids:
+    comment_dict = {"id": [],
+                    "comentario": [],
+                    "upvotes": [],
+                    "parent": [],
+                    "autor": []
+                    }
+    posteo = reddit.submission(postid)
+    posteo.comments.replace_more(limit=0)
+    for comentario in posteo.comments.list():
+        comment_dict["id"].append(comentario.id)
+        comment_dict["comentario"].append(comentario.body)
+        comment_dict["upvotes"].append(comentario.score)
+        comment_dict["parent"].append(comentario.parent_id)
+        comment_dict["autor"].append(comentario.author)
+    comments_del_post = pd.DataFrame(comment_dict)
+    comments_del_post.to_csv(f"Red_Arg_Comm_Post-{postid}-{filename_date}.csv")
+
+# TODO: El próximo paso sería realizar el análisis con NLP.
+# TODO: Por el lado técnico lo siguiente es armar carpetas y subcarpetas para ubicar los CSV cada día.
+# TODO: Siguiente a este proceso es elevar este script en el docker del servidor para su automatización.
