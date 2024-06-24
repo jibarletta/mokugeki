@@ -47,8 +47,8 @@ def freq_palabras(archivo):
     tabla.to_csv(f"Bases/{archivo}-TC.csv")   # TODO: usar mismo formato de archivos y guardar en carpeta. ojo el .csv final aca
     return tabla    # Este return se agregó para las pruebas. Revisar.
 
-
-archivo = "Red_Arg_Comm_Post-1dji1nx--2024-06-19-19-11.csv"
-
-nube_palabras(archivo)
-print(freq_palabras(archivo))
+# TODO: Borrar el código inferior, quedó para pruebas.
+# archivo = "Red_Arg_Comm_Post-1dji1nx--2024-06-19-19-11.csv"
+#
+# nube_palabras(archivo)
+# print(freq_palabras(archivo))
