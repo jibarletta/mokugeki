@@ -40,8 +40,11 @@ for file in os.listdir(f"{Path.cwd()}/Bases/Temas/"):
     df_temp = pd.read_csv(f"{Path.cwd()}/Bases/Temas/{file}", index_col=0)
     for lab, row in df_temp.iterrows():
         dataset_dict['idctx'].append(row['id'])
+        dataset_dict['idcom'].append(row['id'])
         dataset_dict['contexto'].append(row['titulo'])
-        dataset_dict['upvctx'].append((row['upvotes']))
+        dataset_dict['comentario'].append(row['titulo'])
+        dataset_dict['upvctx'].append(row['upvotes'])
+        dataset_dict['upvcom'].append(row['upvotes'])
         df2_temp = pd.read_csv(f"{Path.cwd()}/Bases/Comentarios/Red_Arg_Comm_Post-{row['id']}--{fecha_file}", index_col=0)
         for lab2, row2 in df2_temp.iterrows():
             dataset_dict['idcom'].append(row2['id'])
