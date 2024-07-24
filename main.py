@@ -2,7 +2,7 @@ import pandas as pd
 import datetime
 from datetime import datetime as dt
 from credenciales import redditauth
-from kinou import nube_palabras, freq_palabras, ds_add_temas, ds_add_coms
+from kinou import nube_palabras, freq_palabras
 from pathlib import Path
 
 reddit = redditauth()
@@ -61,7 +61,7 @@ for postid in lista_ids:
     archivo = f"Red_Arg_Comm_Post-{postid}-{filename_date}.csv"
     nube_palabras(archivo)
     freq_palabras(archivo)
-    ds_add_coms(comment_dict)
+    # ds_add_coms(comment_dict)
 
     # Próximo a venir el análisis de sentimientos.
 # TODO: El próximo paso sería realizar el análisis con NLP.
