@@ -12,18 +12,16 @@ dataset_dict = {"id": [],
                 }
 
 for file in os.listdir(f"{Path.cwd()}/Bases/Temas/"):
-    df_temp = pd.read_csv(f"{Path.cwd()}/Bases/Temas/{file}")
-    df_temas = df_temp[1:6]
-    df_temas.set_index('id')
+    df_temas = pd.read_csv(f"{Path.cwd()}/Bases/Temas/{file}", index_col=0)
+    file_nlist = file.split('-')
+    fecha_file = f"{file_nlist[-3]}-{file_nlist[-2]}-{file_nlist[-1]}"
     for lab, row in df_temas.iterrows():
         dataset_dict['id'].append(row['id'])
         dataset_dict['context'].append(row['id'])
         dataset_dict['text'].append(row['titulo'])
         dataset_dict['upv'].append(row['upvotes'])
         dataset_dict['author'].append(row['autor'])
-        fecha_post = row['creado'].split(' ')
-        fecha_post = fecha_post[0]
-        dataset_dict['date'].append(fecha_post)
+        dataset_dict['date'].append(fecha_file[0:10])
         dataset_dict['type'].append('post')
 
 for file in os.listdir(f'{Path.cwd()}/Bases/Comentarios/'):
@@ -43,5 +41,7 @@ for file in os.listdir(f'{Path.cwd()}/Bases/Comentarios/'):
         dataset_dict['date'].append(fecha_file[0:10])
         dataset_dict['type'].append('comment')
 
-dataset = pd.DataFrame.from_dict(dataset_dict)
-dataset.to_csv(f"{Path.cwd()}/Bases/Red_Arg_Dataset.csv")
+# dataset = pd.read_csv(f"{Path.cwd()}/Bases/Red_Arg_Dataset.csv", index_col=0)
+dataset2 = pd.DataFrame.from_dict(dataset_dict)
+# nuevods = pd.concat([dataset, dataset2], sort=False)
+dataset2.to_csv(f"{Path.cwd()}/Bases/Red_Arg_Dataset.csv")

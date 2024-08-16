@@ -16,11 +16,11 @@ stopwords.update(["que", "de", "el", "por", "se", "está", "lo", "en", "si", "ht
 # Definimos la función que vamos a utilizar para el armado de la wordcloud.
 def nube_palabras(archivo):
     """Toma el post y crea la nube de palabras."""
-    file = pd.read_csv(f"{Path.cwd()}/Bases/{archivo}", index_col=0)
+    file = pd.read_csv(f"{Path.cwd()}/Bases/Comentarios/{archivo}", index_col=0)
     data = ','.join(file["comentario"])
     data = data.lower()
     wordcloud = WordCloud(stopwords=stopwords).generate(data)
-    wordcloud.to_file(f"Bases/{archivo}.png")
+    wordcloud.to_file(f"Bases/Nubes/{archivo}.png")
     plt.figure(figsize=(15, 10))
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
@@ -30,7 +30,7 @@ def nube_palabras(archivo):
 # Definimos la función para obtener una tabla de frecuencias de palabras.
 def freq_palabras(archivo):
     """Toma el post y crea la tabla de frecuencias de palabras."""
-    file = pd.read_csv(f"{Path.cwd()}/Bases/{archivo}", index_col=0)
+    file = pd.read_csv(f"{Path.cwd()}/Bases/Comentarios/{archivo}", index_col=0)
     tabla_dict = {"palabra": [], "frecuencia": []}
     data = ','.join(file["comentario"])
     data.lower()
@@ -40,5 +40,5 @@ def freq_palabras(archivo):
         tabla_dict["frecuencia"].append(conteo[word])
     tabla = pd.DataFrame(tabla_dict)
     tabla = tabla.sort_values(by="frecuencia", ascending=False)
-    tabla.to_csv(f"{Path.cwd()}/Bases/{archivo}-TC.csv")
+    tabla.to_csv(f"{Path.cwd()}/Bases/Frecuencias/{archivo}-TC.csv")
     return tabla    # Este return se agregó para las pruebas. Revisar.

@@ -32,10 +32,11 @@ for post in arg_subreddit.top(limit=10, time_filter='day'):
 # Se convierte el diccionario en un data frame.
 temas = pd.DataFrame(post_dict)
 # Se convierte el dataframe en un CSV para posterior análisis. (comentar cuando se hagan pruebas)
-temas.to_csv(f"{Path.cwd()}/Bases/Reddit_Arg_Temas{filename_date}.csv")
-dataset = pd.read_csv(f"{Path.cwd()}/Bases/Red_Arg_Dataset.csv", index_col=0)
+temas.to_csv(f"{Path.cwd()}/Bases/Temas/Reddit_Arg_Temas{filename_date}.csv")
+dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0)
 nuevods = pd.concat([dataset, temas], sort=False)
-nuevods.to_csv(f"{Path.cwd()}/Bases/Red_Arg_Dataset.csv")
+nuevods.reset_index(inplace=True, drop=True)
+nuevods.to_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv")
 
 # Mismo procedimiento anterior pero para los comentarios de cada post.
 lista_ids = temas["id"]
@@ -62,11 +63,12 @@ for postid in lista_ids:
         comment_dict["author"].append(comentario.author)
         comment_dict['date'].append(filename_date)
         comment_dict['type'].append('comment')
-    dataset = pd.read_csv(f"{Path.cwd()}/Bases/Red_Arg_Dataset.csv", index_col=0)
+    dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0)
     comms = pd.DataFrame(comment_dict)
     nuevods = pd.concat([dataset, comms], sort=False)
-    nuevods.to_csv(f"{Path.cwd()}/Bases/Red_Arg_Dataset.csv")
-    comms.to_csv(f"{Path.cwd()}/Bases/Red_Arg_Comm_Post-{postid}-{filename_date}.csv")
+    nuevods.reset_index(inplace=True, drop=True)
+    nuevods.to_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv")
+    comms.to_csv(f"{Path.cwd()}/Bases/Comentarios/Red_Arg_Comm_Post-{postid}-{filename_date}.csv")
     archivo = f"Red_Arg_Comm_Post-{postid}-{filename_date}.csv"
     nube_palabras(archivo)
     freq_palabras(archivo)
