@@ -17,7 +17,7 @@ stopwords.update(["que", "de", "el", "por", "se", "está", "lo", "en", "si", "ht
 def nube_palabras(archivo):
     """Toma el post y crea la nube de palabras."""
     file = pd.read_csv(f"{Path.cwd()}/Bases/Comentarios/{archivo}", index_col=0)
-    data = ','.join(file["comentario"])
+    data = ','.join(file["text"])
     data = data.lower()
     wordcloud = WordCloud(stopwords=stopwords).generate(data)
     wordcloud.to_file(f"Bases/Nubes/{archivo}.png")
@@ -32,7 +32,7 @@ def freq_palabras(archivo):
     """Toma el post y crea la tabla de frecuencias de palabras."""
     file = pd.read_csv(f"{Path.cwd()}/Bases/Comentarios/{archivo}", index_col=0)
     tabla_dict = {"palabra": [], "frecuencia": []}
-    data = ','.join(file["comentario"])
+    data = ','.join(file["text"])
     data.lower()
     conteo = WordCloud(stopwords=stopwords).process_text(data)
     for word in conteo:
