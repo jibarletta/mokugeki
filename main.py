@@ -40,15 +40,15 @@ nuevods.to_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv")
 
 # Mismo procedimiento anterior pero para los comentarios de cada post.
 lista_ids = temas["id"]
+comment_dict = {"id": [],
+                "context": [],
+                "text": [],
+                "upv": [],
+                "author": [],
+                "date": [],
+                "type": [],
+                }
 for postid in lista_ids:
-    comment_dict = {"id": [],
-                    "context": [],
-                    "text": [],
-                    "upv": [],
-                    "author": [],
-                    "date": [],
-                    "type": [],
-                    }
     posteo = reddit.submission(postid)
     posteo.comments.replace_more(limit=0)
     for comentario in posteo.comments.list():
@@ -63,12 +63,15 @@ for postid in lista_ids:
         comment_dict["author"].append(comentario.author)
         comment_dict['date'].append(filename_date)
         comment_dict['type'].append('comment')
-    dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0)
-    comms = pd.DataFrame(comment_dict)
-    nuevods = pd.concat([dataset, comms], sort=False)
-    nuevods.reset_index(inplace=True, drop=True)
-    nuevods.to_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv")
-    comms.to_csv(f"{Path.cwd()}/Bases/Comentarios/Red_Arg_Comm_Post-{postid}-{filename_date}.csv")
-    archivo = f"Red_Arg_Comm_Post-{postid}-{filename_date}.csv"
-    nube_palabras(archivo)
-    freq_palabras(archivo)
+dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0)
+comms = pd.DataFrame(comment_dict)
+dsdiario = pd.concat([temas, comms], sort=False)
+dsdiario.reset_index(inplace=True, drop=True)
+dsdiario.to_csv(f"{Path.cwd()}/Bases/Dataset/Diarios/Red_Arg_Dataset-{filename_date}.csv")
+nuevods = pd.concat([dataset, comms], sort=False)
+nuevods.reset_index(inplace=True, drop=True)
+nuevods.to_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv")
+comms.to_csv(f"{Path.cwd()}/Bases/Comentarios/Red_Arg_Comm_Post-{postid}-{filename_date}.csv")
+archivo = f"Red_Arg_Comm_Post-{postid}-{filename_date}.csv"
+nube_palabras(archivo)
+freq_palabras(archivo)

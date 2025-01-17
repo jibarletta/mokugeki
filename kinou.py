@@ -42,3 +42,5 @@ def freq_palabras(archivo):
     tabla = tabla.sort_values(by="frecuencia", ascending=False)
     tabla.to_csv(f"{Path.cwd()}/Bases/Frecuencias/{archivo}-TC.csv")
     return tabla    # Este return se agregó para las pruebas. Revisar.
+
+#def limpieza(archivo):
