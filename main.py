@@ -18,6 +18,7 @@ post_dict = {"id": [],
              "author": [],
              "date": [],
              "type": [],
+             "flair": [],
              }
 arg_subreddit = reddit.subreddit('Argentina')
 for post in arg_subreddit.top(limit=10, time_filter='day'):
@@ -28,6 +29,7 @@ for post in arg_subreddit.top(limit=10, time_filter='day'):
     post_dict["author"].append(post.author)
     post_dict["date"].append(filename_date)
     post_dict['type'].append('post')
+    post_dict['flair'].append(post.flair)
 
 # Se convierte el diccionario en un data frame.
 temas = pd.DataFrame(post_dict)
@@ -47,6 +49,7 @@ comment_dict = {"id": [],
                 "author": [],
                 "date": [],
                 "type": [],
+                "flair": [],
                 }
 for postid in lista_ids:
     posteo = reddit.submission(postid)
@@ -63,6 +66,7 @@ for postid in lista_ids:
         comment_dict["author"].append(comentario.author)
         comment_dict['date'].append(filename_date)
         comment_dict['type'].append('comment')
+        comment_dict['flair'].appen('N/A')
 dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0)
 comms = pd.DataFrame(comment_dict)
 dsdiario = pd.concat([temas, comms], sort=False)
