@@ -19,6 +19,7 @@ post_dict = {"id": [],
              "date": [],
              "type": [],
              "flair": [],
+             "post id": [],
              }
 arg_subreddit = reddit.subreddit('Argentina')
 for post in arg_subreddit.top(limit=10, time_filter='day'):
@@ -29,13 +30,14 @@ for post in arg_subreddit.top(limit=10, time_filter='day'):
     post_dict["author"].append(post.author)
     post_dict["date"].append(filename_date)
     post_dict['type'].append('post')
-    post_dict['flair'].append(post.flair)
+    post_dict['flair'].append(post.link_flair_text)
+    post_dict['post id'].append(post.id)
 
 # Se convierte el diccionario en un data frame.
 temas = pd.DataFrame(post_dict)
 # Se convierte el dataframe en un CSV para posterior análisis. (comentar cuando se hagan pruebas)
 temas.to_csv(f"{Path.cwd()}/Bases/Temas/Reddit_Arg_Temas{filename_date}.csv")
-dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0)
+dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0, low_memory=True)
 nuevods = pd.concat([dataset, temas], sort=False)
 nuevods.reset_index(inplace=True, drop=True)
 nuevods.to_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv")
@@ -50,6 +52,7 @@ comment_dict = {"id": [],
                 "date": [],
                 "type": [],
                 "flair": [],
+                "post id": [],
                 }
 for postid in lista_ids:
     posteo = reddit.submission(postid)
@@ -66,8 +69,10 @@ for postid in lista_ids:
         comment_dict["author"].append(comentario.author)
         comment_dict['date'].append(filename_date)
         comment_dict['type'].append('comment')
-        comment_dict['flair'].appen('N/A')
-dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0)
+        comment_dict['flair'].append('NA')
+        comment_dict['post id'].append(postid)
+
+dataset = pd.read_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv", index_col=0, low_memory=True)
 comms = pd.DataFrame(comment_dict)
 dsdiario = pd.concat([temas, comms], sort=False)
 dsdiario.reset_index(inplace=True, drop=True)
@@ -77,5 +82,5 @@ nuevods.reset_index(inplace=True, drop=True)
 nuevods.to_csv(f"{Path.cwd()}/Bases/Dataset/Red_Arg_Dataset.csv")
 comms.to_csv(f"{Path.cwd()}/Bases/Comentarios/Red_Arg_Comm_Post-{postid}-{filename_date}.csv")
 archivo = f"Red_Arg_Comm_Post-{postid}-{filename_date}.csv"
-nube_palabras(archivo)
-freq_palabras(archivo)
+# nube_palabras(archivo)
+# freq_palabras(archivo)
